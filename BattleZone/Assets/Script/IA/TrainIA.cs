@@ -18,7 +18,7 @@ public class TrainIA : MonoBehaviour {
 
     public List<List<s_neural>> _neuralNetPop;
 
-    public List<List<s_neural>> NeuralNetPop { get { return _neuralNetPop; }, set { _neuralNetPop = value; } }
+    public List<List<s_neural>> NeuralNetPop { get { return _neuralNetPop; } set { _neuralNetPop = value; } }
 
     // Use this for initialization
     void Start () {
