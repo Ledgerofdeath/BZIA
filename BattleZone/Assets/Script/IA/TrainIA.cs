@@ -29,7 +29,7 @@ public class TrainIA : MonoBehaviour {
 	void Update () {
 		
 	}
-
+    //function
     public double Sigmoid(double z)
     {
         return (1/(1+Math.Exp(z)));
