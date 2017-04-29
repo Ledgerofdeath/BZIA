@@ -84,9 +84,9 @@ public class TrainIA : MonoBehaviour {
     {
         
 
-        int c = Random.Range(0, _config.Count);
-        int i = Random.Range(0, ((neuralNet[c].W).RowCount + 1));
-        int j = Random.Range(0, ((neuralNet[c].W).ColumnCount + 1));
+        int c = Random.Range(0, (_config.Count-1));
+        int i = Random.Range(0, _config[c]);
+        int j = Random.Range(0, _config[c+1]);
 
         (neuralNet[c].W)[i,j] = (neuralNet[c].W)[i, j] + _normalLaw.Sample();
 
@@ -100,12 +100,18 @@ public class TrainIA : MonoBehaviour {
         List<s_neural> child2 = neuralNet2;
 
         int c = Random.Range(0, _config.Count);
-        int i = Random.Range(1, ((neuralNet1[c].W).RowCount + 1));
-        int j = Random.Range(1, ((neuralNet1[c].W).ColumnCount + 1));
+        int i = Random.Range(1, _config[c]);
+        int j = Random.Range(1, _config[c+1]);
+        int k = Random.Range(1, _config[c]);
 
-        double aux = (child1[c].W)[i, j];
+        double aux1 = (child1[c].W)[i, j];
         (child1[c].W)[i, j] = (child2[c].W)[i, j];
-        (child2[c].W)[i, j] = aux;
+        (child2[c].W)[i, j] = aux1;
+
+        double aux2 = (child1[c].b)[k];
+        (child1[c].b)[k]= (child2[c].b)[k];
+        (child2[c].b)[k] = aux2;
+
 
         var children = new List<List<s_neural>>
         {
@@ -124,20 +130,39 @@ public class TrainIA : MonoBehaviour {
         List<s_neural> child1 = neuralNet1;
         List<s_neural> child2 = neuralNet2;
 
-        int c = Random.Range(1, _config.Count);
+        int c = Random.Range(0, (_config.Count+1));
         int i = Random.Range(1, (_config[c]+1));
-        
-        Vector<double> aux1 = (child1[c].W).Row(i);
+
+        if ( c==0 )
+        {
+            Vector<double> aux1 = (child1[c].W).Row(i);
+            (child1[c].W).SetRow(i, (child2[c].W).Row(i));
+            (child2[c].W).SetRow(i, aux1);
+        }
+
+        if (c == (_config.Count))
+        {
+            Vector<double> aux2 = (child1[c - 1].W).Column(i);
+            (child1[c - 1].W).SetColumn(i, (child2[c - 1].W).Column(i));
+            (child2[c - 1].W).SetColumn(i, aux2);
+
+            double aux3 = (child1[c-1].b)[i];
+            (child1[c-1].b)[i] = (child2[c-1].b)[i];
+            (child2[c-1].b)[i] = aux3;
+        }
+
+
+        Vector<double> aux4 = (child1[c].W).Row(i);
         (child1[c].W).SetRow(i, (child2[c].W).Row(i));
-        (child2[c].W).SetRow(i, aux1);
+        (child2[c].W).SetRow(i, aux4);
 
-        Vector<double> aux2 = (child1[c-1].W).Column(i);
-        (child1[c-1].W).SetColumn(i, (child2[c-1].W)Column(i));
-        (child2[c-1].W).SetColumn(i, aux2);
+        Vector<double> aux5 = (child1[c-1].W).Column(i);
+        (child1[c-1].W).SetColumn(i, (child2[c-1].W).Column(i));
+        (child2[c-1].W).SetColumn(i, aux5);
 
-        double aux3 = (child1[c].b)[i-1];
-        (child1[c].b)[i-1] = (child2[c].b)[i-1];
-        (child2[c].b)[i-1] = aux3;
+        double aux6 = (child1[c-1].b)[i];
+        (child1[c-1].b)[i] = (child2[c-1].b)[i];
+        (child2[c-1].b)[i] = aux6;
 
         var children = new List<List<s_neural>>
         {
