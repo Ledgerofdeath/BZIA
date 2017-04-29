@@ -96,6 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\IA\NeuralLayer.cs" />
     <Compile Include="Assets\Script\IA\TrainIA.cs" />
     <Compile Include="Assets\Script\Ship\ShipMove.cs" />
   </ItemGroup>

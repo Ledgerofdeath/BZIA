@@ -19,53 +19,63 @@ public class TrainIA : MonoBehaviour {
 
     ContinuousUniform _uniformLaw;
 
-    public int _probaMutation;
+    public double _probaMutation;
 
     public int _taillePop;
 
+    public Vector2 _range = Vector2.zero;
+
     public List<int> _config;
 
-    public List<List<s_neural>> _neuralNetPop;
+    public List<List<NeuralLayer>> _neuralNetPop = new List<List<NeuralLayer>>();
 
-    public int ProbaMutation { get { return _probaMutation; } set { _probaMutation = value; } }
+    List<NeuralLayer> _currentNetPop;
+
+    public double ProbaMutation { get { return _probaMutation; } set { _probaMutation = value; } }
 
     public int TaillePop { get { return _taillePop; } set { _taillePop = value; } }
 
     public List<int> Config { get { return _config; } set { _config = value; } }
 
-    public List<List<s_neural>> NeuralNetPop { get { return _neuralNetPop; } set { _neuralNetPop = value; } }
+    public List<List<NeuralLayer>> NeuralNetPop { get { return _neuralNetPop; } set { _neuralNetPop = value; } }
 
     // Use this for initialization
     void Start () {
-		
+        _uniformLaw = new ContinuousUniform(_range.x, _range.y);
+        InitPop();
+
+        /*foreach (List<NeuralLayer> ln in _neuralNetPop)
+        {
+            foreach (NeuralLayer n in ln)
+            {
+                for (int i = 0; i < n.Weight.RowCount; i++)
+                {
+                    for (int j = 0; j < n.Weight.ColumnCount; j++)
+                    {
+                        //sDebug.Log("Point W: " + n.Weight[i, j]);
+                    }
+                }
+                Debug.Log("count : " + n.Bias.Count);
+                for (int i = 0; i < n.Bias.Count; i++)
+                {
+                   // Debug.Log("Point b:" + n.Bias[i]);
+                }
+            }
+        }*/
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-    
-    public void SigmoidVect(Vector<double> z)
-    {
-        z.Negate(z);
-        z.PointwiseExp(z);
-        z.Add(1, z);
-        z.PointwisePower(-1, z);
-    }
 
-    public void InitLayer(s_neural neur, int nbNeur1, int nbNeur2)
-    {
-        neur.W = Matrix<double>.Build.Random(nbNeur1, nbNeur2, _uniformLaw);
-        neur.b = Vector<double>.Build.Random(nbNeur2, 0);
-        neur.score = 0;
-    }
-
-    public void InitNet(List<s_neural> neuralNet)
+    public void InitNet()
     {
         int i = 0;
         while (i < (_config.Count-1))
         {
-            InitLayer(neuralNet[i], _config[i], _config[i + 1]);
+            _currentNetPop.Add(new NeuralLayer(_uniformLaw, _config[i], _config[i + 1]));
+            i++;
         }
     }
 
@@ -74,19 +84,20 @@ public class TrainIA : MonoBehaviour {
         int i = 0;
         while (i < _taillePop)
         {
-            InitNet(_neuralNetPop[i]);
+            _currentNetPop = new List<NeuralLayer>();
+            InitNet();
+            _neuralNetPop.Add(_currentNetPop);
+            i++;
         }
-        
-
     }
 
     public void Mutate(List<s_neural> neuralNet)
     {
         
 
-        int c = Random.Range(0, (_config.Count-1));
-        int i = Random.Range(0, _config[c]);
-        int j = Random.Range(0, _config[c+1]);
+        int c = UnityEngine.Random.Range(0, (_config.Count-1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
+        int j = UnityEngine.Random.Range(0, _config[c+1]);
 
         (neuralNet[c].W)[i,j] = (neuralNet[c].W)[i, j] + _normalLaw.Sample();
 
@@ -99,10 +110,10 @@ public class TrainIA : MonoBehaviour {
         List<s_neural> child1 = neuralNet1;
         List<s_neural> child2 = neuralNet2;
 
-        int c = Random.Range(0, _config.Count);
-        int i = Random.Range(1, _config[c]);
-        int j = Random.Range(1, _config[c+1]);
-        int k = Random.Range(1, _config[c]);
+        int c = UnityEngine.Random.Range(0, _config.Count);
+        int i = UnityEngine.Random.Range(1, _config[c]);
+        int j = UnityEngine.Random.Range(1, _config[c+1]);
+        int k = UnityEngine.Random.Range(1, _config[c]);
 
         double aux1 = (child1[c].W)[i, j];
         (child1[c].W)[i, j] = (child2[c].W)[i, j];
@@ -130,8 +141,8 @@ public class TrainIA : MonoBehaviour {
         List<s_neural> child1 = neuralNet1;
         List<s_neural> child2 = neuralNet2;
 
-        int c = Random.Range(0, (_config.Count+1));
-        int i = Random.Range(1, (_config[c]+1));
+        int c = UnityEngine.Random.Range(0, (_config.Count+1));
+        int i = UnityEngine.Random.Range(1, (_config[c]+1));
 
         if ( c==0 )
         {
@@ -174,19 +185,11 @@ public class TrainIA : MonoBehaviour {
 
     }
 
-
-    public void CalcLayer(Vector<double> entree, s_neural neur )
+    public void CalcNet(Vector<double> entree, List<NeuralLayer> neuralNet)
     {
-        entree = (neur.W).LeftMultiply(entree) + neur.b;
-        SigmoidVect(entree);
-
-    }
-
-    public void CalcNet(Vector<double> entree, List<s_neural> neuralNet)
-    {
-        foreach (s_neural e in neuralNet)
+        foreach (NeuralLayer e in neuralNet)
         {
-          CalcLayer(entree, e);
+          e.CalcLayer(entree);
         }
     }
 
