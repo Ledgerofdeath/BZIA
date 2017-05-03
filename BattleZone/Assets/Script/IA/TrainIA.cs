@@ -24,10 +24,6 @@ public class TrainIA : MonoBehaviour {
 
     public List<NeuralNet> _neuralNetPop = new List<NeuralNet>();
 
-    public float ProbaMutation { get { return _probaMutation; } set { _probaMutation = value; } }
-
-    public int TaillePop { get { return _taillePop; } set { _taillePop = value; } }
-
     public List<int> Config { get { return _config; } set { _config = value; } }
 
     public List<NeuralNet> NeuralNetPop { get { return _neuralNetPop; } set { _neuralNetPop = value; } }
@@ -99,12 +95,26 @@ public class TrainIA : MonoBehaviour {
         }
     }
 
-    public void ReproducePop(List<NeuralNet> bestNN )
+    public void ReproducePop (List<NeuralNet> bestNN )
     {
-        foreach (NeuralNet n in bestNN)
+        int i;
+        int j;
+        List<NeuralNet> temp = new List<NeuralNet>();
+
+        while (temp.Count < _taillePop)
         {
-            
+             i= UnityEngine.Random.Range(0, bestNN.Count);
+          
+            do
+            {
+                 j= UnityEngine.Random.Range(0, bestNN.Count);
+
+            } while (i == j);
+
+            temp.AddRange(bestNN[i].Reproduce2(bestNN[j], _config));
         }
+
+        NeuralNetPop = temp;
     }
 
 }
