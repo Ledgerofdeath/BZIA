@@ -25,6 +25,13 @@ public class NeuralLayer {
         return entree;
     }
 
+    public Vector<float> CalcLastLayer(Vector<float> entree)
+    {
+        entree = SoftmaxVect((_Weight).LeftMultiply(entree) + _bias);
+        return entree;
+    }
+
+
     Vector<float> SigmoidVect(Vector<float> z)
     {
         z.Negate(z);
@@ -32,6 +39,13 @@ public class NeuralLayer {
         z.Add(1, z);
         z.PointwisePower(-1, z);
 
+        return z;
+    }
+
+    Vector<float> SoftmaxVect(Vector<float> z)
+    {
+        z.PointwiseExp(z);
+        z.Divide(z.Sum(), z);
         return z;
     }
 }
