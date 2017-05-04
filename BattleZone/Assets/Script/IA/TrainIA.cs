@@ -22,28 +22,23 @@ public class TrainIA : MonoBehaviour {
 
     public List<int> _config;
 
-    public List<NeuralNet> _neuralNetPop = new List<NeuralNet>();
-
-    public List<int> Config { get { return _config; } set { _config = value; } }
-
-    public List<NeuralNet> NeuralNetPop { get { return _neuralNetPop; } set { _neuralNetPop = value; } }
-
+    
     // Use this for initialization
     void Start () {
+		
         _uniformLaw = new ContinuousUniform(_range.x, _range.y);
         _normalLaw = new Normal(_paramNorm.x, _paramNorm.y);
 
-        InitPop();
+		neuralPop = new NeuralPop(_config,_taillePop)
+        neuralPop.InitPop();
+		
 
         Vector<float> entree = Vector<float>.Build.Dense(4);
 
-        foreach (NeuralNet ln in _neuralNetPop)
+		
+        foreach (NeuralNet ln in neuralPop)
         {
-
-            ln.MutateBias(_normalLaw, _config);
-            ln.MutateWeigh(_normalLaw, _config);
-            List<NeuralNet> test = ln.Reproduce1(ln, _config);
-            List<NeuralNet> test2 = ln.Reproduce2(ln, _config);
+            
             ln.CalcNet(entree);
             foreach (NeuralLayer n in ln.LayerNet)
 
