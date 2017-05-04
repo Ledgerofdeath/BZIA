@@ -9,8 +9,6 @@ public class NeuralPop {
 
     public int _taillePop;
 
-    public List<int> _config;
-
     public List<NeuralNet> _neuralNetPop;
 
     public List<NeuralNet> NeuralNetPop { get { return _neuralNetPop; } }
@@ -18,27 +16,47 @@ public class NeuralPop {
 	public NeuralPop( List<int> config, int taillePop )
 	{
 		_neuralNetPop = new List<NeuralNet>();
-		_config = config;
 		_taillePop = taillePop;
 		
 	}
 	
-	public void LoadPop()
-	{
-		
-	}
-	
-    public void InitPop(ContinuousUniform uni)
+	public void InitPop(ContinuousUniform uni, list<int> config)
     {
         int i = 0;
         while (i < _taillePop)
         {
             
-            _neuralNetPop.Add(new NeuralNet(uni,_config));
+            _neuralNetPop.Add(new NeuralNet(uni, config));
             i++;
         }
     }
 
+	
+	public void SavePop( string filename)
+	{
+		FileStream fs = new FileStream(filename + ".dat", FileMode.Create);
+		BinaryFormatter bf = new BinaryFormatter();
+		bf.Serialize(fs, _neuralNetPop);
+		fs.Close();
+
+	}
+	
+	public void LoadPop(string filename)
+	{
+		using (Stream stream = File.Open(filename + ".dat", FileMode.Open))
+         {
+             var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+ 
+             _neuralNetPop = (List<NeuralNet>)bformatter.Deserialize(stream);
+         }
+		 _taillePop = _neuralNetPop.Count;
+	}
+	
+	public List<NeuralNet> SelectBest () 
+	{
+		
+	}
+	
     public void MutatePop(List<NeuralNet> bestNN, Normal norm, float probaMutation)
     {
         foreach (NeuralNet n in bestNN)
@@ -47,8 +65,8 @@ public class NeuralPop {
 
             if (proba < probaMutation)
             {
-                n.MutateBias(norm, _config);
-                n.MutateWeigh(norm, _config);
+                n.MutateBias(norm);
+                n.MutateWeigh(norm);
             }
         }
     }
@@ -69,7 +87,7 @@ public class NeuralPop {
 
             } while (i == j);
 
-            temp.AddRange(bestNN[i].Reproduce2(bestNN[j], _config));
+            temp.AddRange(bestNN[i].Reproduce2(bestNN[j]));
         }
 
         NeuralNetPop = temp;

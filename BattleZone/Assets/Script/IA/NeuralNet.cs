@@ -5,24 +5,27 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.Distributions;
 
-
+[System.Serializable]
 public class NeuralNet {
 
     List<NeuralLayer> _layerNet;
-
+	List<int> _config;
     int _score;
 
     public List<NeuralLayer> LayerNet { get { return _layerNet; } }
+	
+	public List<int> Config{ get { return _config; } }
 
     public int Score { get { return _score; } set { _score = value; } }
 
     public NeuralNet(ContinuousUniform uni, List<int> config)
     {
         _layerNet = new List<NeuralLayer>();
+		_config = config;
         int i = 0;
-        while (i < (config.Count - 1))
+        while (i < (_config.Count - 1))
         {
-            _layerNet.Add(new NeuralLayer(uni, config[i], config[i + 1]));
+            _layerNet.Add(new NeuralLayer(uni, _config[i], _config[i + 1]));
             i++;
         }
 
@@ -31,18 +34,22 @@ public class NeuralNet {
 
     public void CalcNet(Vector<float> entree)
     {
+		int i = 0;
+		
+		while (i<(_layerNet.Count-1))
+		{
+			entree=_layerNet[i++].CalcLayer(entree);
+		}
+		
+		entree=_layerNet[i].CalcLastLayer(entree);
   
-        foreach (NeuralLayer e in _layerNet)
-        {
-            entree=e.CalcLayer(entree);
-        }
     }
 
-    public void MutateBias(Normal norm,List<int> config)
+    public void MutateBias(Normal norm)
     {
 
-        int c = UnityEngine.Random.Range(0, (config.Count-1));
-        int i = UnityEngine.Random.Range(0, config[c]);
+        int c = UnityEngine.Random.Range(0, (_config.Count-1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
 
         Debug.Log("cM1:" + c);
         Debug.Log("iM1:" + i);
@@ -51,12 +58,12 @@ public class NeuralNet {
 
     }
 
-    public void MutateWeigh(Normal norm, List<int> config)
+    public void MutateWeigh(Normal norm)
     {
 
-        int c = UnityEngine.Random.Range(0, (config.Count-1));
-        int i = UnityEngine.Random.Range(0, config[c]);
-        int j = UnityEngine.Random.Range(0, config[c + 1]);
+        int c = UnityEngine.Random.Range(0, (_config.Count-1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
+        int j = UnityEngine.Random.Range(0, _config[c + 1]);
 
         Debug.Log("cM2:" + c);
         Debug.Log("iM2:" + i);
@@ -67,7 +74,7 @@ public class NeuralNet {
 
     }
 
-    public List<NeuralNet> Reproduce1( NeuralNet neuralNet2, List<int> config)
+    public List<NeuralNet> Reproduce1( NeuralNet neuralNet2)
     {
 
 
@@ -77,10 +84,10 @@ public class NeuralNet {
         child1.Score = 0;
         child2.Score = 0;
 
-        int c = UnityEngine.Random.Range(0, (config.Count-1));
-        int i = UnityEngine.Random.Range(0, config[c]);
-        int j = UnityEngine.Random.Range(0, config[c + 1]);
-        int k = UnityEngine.Random.Range(0, config[c]);
+        int c = UnityEngine.Random.Range(0, (_config.Count-1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
+        int j = UnityEngine.Random.Range(0, _config[c + 1]);
+        int k = UnityEngine.Random.Range(0, _config[c]);
 
         Debug.Log("cR1:" + c);
         Debug.Log("iR1:" + i);
@@ -107,7 +114,7 @@ public class NeuralNet {
 
     }
 
-    public List<NeuralNet> Reproduce2(NeuralNet neuralNet2, List<int> config)
+    public List<NeuralNet> Reproduce2(NeuralNet neuralNet2)
     {
 
 
@@ -118,8 +125,8 @@ public class NeuralNet {
         child2.Score = 0;
 
 
-        int c = UnityEngine.Random.Range(0, (config.Count-1));
-        int i = UnityEngine.Random.Range(0, config[c]);
+        int c = UnityEngine.Random.Range(0, (_config.Count-1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
 
         Debug.Log("cR2:" + c);
         Debug.Log("iR2:" + i);
@@ -131,7 +138,7 @@ public class NeuralNet {
             (child2.LayerNet[c].Weight).SetRow(i, aux1);
         }
 
-        else if (c == (config.Count - 2))
+        else if (c == (_config.Count - 2))
         {
             Vector<float> aux2 = (child1.LayerNet[c - 1].Weight).Column(i);
             (child1.LayerNet[c - 1].Weight).SetColumn(i, (child2.LayerNet[c - 1].Weight).Column(i));
