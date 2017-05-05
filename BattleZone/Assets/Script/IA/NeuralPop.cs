@@ -52,14 +52,16 @@ public class NeuralPop {
 		 _taillePop = _neuralNetPop.Count;
 	}
 	
-	public List<NeuralNet> SelectBest () 
+	public List<NeuralNet> SelectBest (int numSel) 
 	{
-		
+		_neuralNetPop.Sort((s1, s2) => s1.Score.CompareTo(s2.Score));
+		list<NeuralNet> res = _neuralNetPop.GetRange(0,numSel);
+		return res;
 	}
 	
-    public void MutatePop(List<NeuralNet> bestNN, Normal norm, float probaMutation)
+    public void MutatePop( Normal norm, float probaMutation)
     {
-        foreach (NeuralNet n in bestNN)
+        foreach (NeuralNet n in _neuralNetPop)
         {
             float proba = UnityEngine.Random.Range(0, 1.0f);
 
@@ -71,11 +73,12 @@ public class NeuralPop {
         }
     }
 
-    public void ReproducePop (List<NeuralNet> bestNN )
+    public void ReproducePop (int numSel)
     {
         int i;
         int j;
         List<NeuralNet> temp = new List<NeuralNet>();
+		bestNN = this.SelectBest(numSel);
 
         while (temp.Count < _taillePop)
         {

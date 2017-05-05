@@ -29,14 +29,10 @@ public class TrainIA : MonoBehaviour {
         _uniformLaw = new ContinuousUniform(_range.x, _range.y);
         _normalLaw = new Normal(_paramNorm.x, _paramNorm.y);
 
-		neuralPop = new NeuralPop(_config,_taillePop)
+		neuralPop = new NeuralPop(_config,_taillePop);
         neuralPop.InitPop();
-		
-
-        Vector<float> entree = Vector<float>.Build.Dense(4);
-
-		
-        foreach (NeuralNet ln in neuralPop)
+		Vector<float> entree = Vector<float>.Build.Dense(4);
+		foreach (NeuralNet ln in neuralPop.NeuralNetPop)
         {
             
             ln.CalcNet(entree);
@@ -58,6 +54,16 @@ public class TrainIA : MonoBehaviour {
                 }
             }
         }
+		neuralPop.SavePop("IA");
+		neuralPop.LoadPop("IA");
+		neuralPop.ReproducePop(10);
+		neuralPop.MutatePop(_normalLaw,_probaMutation);
+		
+
+        
+
+		
+        
 	}
 	
 	// Update is called once per frame
