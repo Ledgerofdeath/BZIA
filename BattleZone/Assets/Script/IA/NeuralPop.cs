@@ -1,11 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.Distributions;
 
 public class NeuralPop {
+
 
     public int _taillePop;
 
@@ -20,7 +25,7 @@ public class NeuralPop {
 		
 	}
 	
-	public void InitPop(ContinuousUniform uni, list<int> config)
+	public void InitPop(ContinuousUniform uni, List<int> config)
     {
         int i = 0;
         while (i < _taillePop)
@@ -55,7 +60,7 @@ public class NeuralPop {
 	public List<NeuralNet> SelectBest (int numSel) 
 	{
 		_neuralNetPop.Sort((s1, s2) => s1.Score.CompareTo(s2.Score));
-		list<NeuralNet> res = _neuralNetPop.GetRange(0,numSel);
+		List<NeuralNet> res = _neuralNetPop.GetRange(0,numSel);
 		return res;
 	}
 	
@@ -78,7 +83,7 @@ public class NeuralPop {
         int i;
         int j;
         List<NeuralNet> temp = new List<NeuralNet>();
-		bestNN = this.SelectBest(numSel);
+        List<NeuralNet> bestNN = this.SelectBest(numSel);
 
         while (temp.Count < _taillePop)
         {
@@ -93,7 +98,7 @@ public class NeuralPop {
             temp.AddRange(bestNN[i].Reproduce2(bestNN[j]));
         }
 
-        NeuralNetPop = temp;
+        _neuralNetPop = temp;
     }
 
 }

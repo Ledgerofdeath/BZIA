@@ -29,8 +29,8 @@ public class TrainIA : MonoBehaviour {
         _uniformLaw = new ContinuousUniform(_range.x, _range.y);
         _normalLaw = new Normal(_paramNorm.x, _paramNorm.y);
 
-		neuralPop = new NeuralPop(_config,_taillePop);
-        neuralPop.InitPop();
+		NeuralPop neuralPop = new NeuralPop(_config,_taillePop);
+        neuralPop.InitPop(_uniformLaw,_config);
 		Vector<float> entree = Vector<float>.Build.Dense(4);
 		foreach (NeuralNet ln in neuralPop.NeuralNetPop)
         {

@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Script\IA\NeuralLayer.cs" />
      <Compile Include="Assets\Script\IA\NeuralNet.cs" />
+     <Compile Include="Assets\Script\IA\NeuralPop.cs" />
      <Compile Include="Assets\Script\IA\TrainIA.cs" />
      <Compile Include="Assets\Script\Ship\ShipMove.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
