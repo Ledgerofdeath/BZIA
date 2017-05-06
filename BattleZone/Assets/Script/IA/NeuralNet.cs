@@ -55,9 +55,6 @@ public class NeuralNet {
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
         int i = UnityEngine.Random.Range(0, _config[c]);
 
-        Debug.Log("cM1:" + c);
-        Debug.Log("iM1:" + i);
-
         (_layerNet[c].Bias)[i] = (_layerNet[c].Bias)[i] +(float) norm.Sample();
 
     }
@@ -68,10 +65,6 @@ public class NeuralNet {
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
         int i = UnityEngine.Random.Range(0, _config[c]);
         int j = UnityEngine.Random.Range(0, _config[c + 1]);
-
-        Debug.Log("cM2:" + c);
-        Debug.Log("iM2:" + i);
-        Debug.Log("jM1:" + j);
        
 
         (_layerNet[c].Weight)[i, j] = (_layerNet[c].Weight)[i, j] +(float) norm.Sample();
@@ -92,11 +85,6 @@ public class NeuralNet {
         int i = UnityEngine.Random.Range(0, _config[c]);
         int j = UnityEngine.Random.Range(0, _config[c + 1]);
         int k = UnityEngine.Random.Range(0, _config[c]);
-
-        Debug.Log("cR1:" + c);
-        Debug.Log("iR1:" + i);
-        Debug.Log("jR1:" + j);
-        Debug.Log("kR1:" + k);
       
 
         float aux1 = (child1.LayerNet[c].Weight)[i, j];
@@ -132,41 +120,13 @@ public class NeuralNet {
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
         int i = UnityEngine.Random.Range(0, _config[c]);
 
-        Debug.Log("cR2:" + c);
-        Debug.Log("iR2:" + i);
-
-        if (c == 0)
-        {
             Vector<float> aux1 = (child1.LayerNet[c].Weight).Row(i);
             (child1.LayerNet[c].Weight).SetRow(i, (child2.LayerNet[c].Weight).Row(i));
             (child2.LayerNet[c].Weight).SetRow(i, aux1);
-        }
 
-        else if (c == (_config.Count - 2))
-        {
-            Vector<float> aux2 = (child1.LayerNet[c - 1].Weight).Column(i);
-            (child1.LayerNet[c - 1].Weight).SetColumn(i, (child2.LayerNet[c - 1].Weight).Column(i));
-            (child2.LayerNet[c - 1].Weight).SetColumn(i, aux2);
-
-            float aux3 = (child1.LayerNet[c - 1].Bias)[i];
-            (child1.LayerNet[c - 1].Bias)[i] = (child2.LayerNet[c - 1].Bias)[i];
-            (child2.LayerNet[c - 1].Bias)[i] = aux3;
-        }
-
-        else
-        {
-            Vector<float> aux4 = (child1.LayerNet[c].Weight).Row(i);
-            (child1.LayerNet[c].Weight).SetRow(i, (child2.LayerNet[c].Weight).Row(i));
-            (child2.LayerNet[c].Weight).SetRow(i, aux4);
-
-            Vector<float> aux5 = (child1.LayerNet[c - 1].Weight).Column(i);
-            (child1.LayerNet[c - 1].Weight).SetColumn(i, (child2.LayerNet[c - 1].Weight).Column(i));
-            (child2.LayerNet[c - 1].Weight).SetColumn(i, aux5);
-
-            float aux6 = (child1.LayerNet[c - 1].Bias)[i];
-            (child1.LayerNet[c - 1].Bias)[i] = (child2.LayerNet[c - 1].Bias)[i];
-            (child2.LayerNet[c - 1].Bias)[i] = aux6;
-        }
+            float aux6 = (child1.LayerNet[c].Bias)[i];
+            (child1.LayerNet[c].Bias)[i] = (child2.LayerNet[c - 1].Bias)[i];
+            (child2.LayerNet[c].Bias)[i] = aux6;
 
         var children = new List<NeuralNet>
         {
