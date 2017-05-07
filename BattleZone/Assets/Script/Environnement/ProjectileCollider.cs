@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileCollider : MonoBehaviour {
-    public GameObject _explosion = null;
+    [SerializeField]
+    int _weaponID = 0;
+
     void OnCollisionEnter(Collision collision)
     {
-        Instantiate(_explosion, transform.position, _explosion.transform.rotation);
+        WeaponData weapon = GameManager.Instance.FindWeaponByID(_weaponID);
+        Instantiate(weapon.Explosion, transform.position, weapon.Explosion.transform.rotation);
+        ShipManager ship = collision.gameObject.GetComponent<ShipManager>();
+        if (ship != null)
+            ship.GetDammage(GameManager.Instance.FindWeaponByID(_weaponID).Damage);
         Destroy(this.gameObject);
     }
 }
