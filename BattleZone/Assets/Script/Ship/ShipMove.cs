@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipMove : MonoBehaviour {
+[System.Serializable]
+public class ShipMove : System.Object {
 
     public float _sensitive;
     public Vector2 _sensitiveRotation = Vector2.zero;
@@ -14,17 +15,19 @@ public class ShipMove : MonoBehaviour {
 
     public GameObject _bodyShip = null;
 
+    public Transform transform;
+
     float _currentSpeed = 0.0f;
     float _currentSpeedLateral = 0.0f;
     public Vector2 _speedSensitive = Vector2.zero;
 
-    void Start()
+    public void StartMove()
     {
         Cursor.lockState = CursorLockMode.Locked;
         _currentOrentation = _bodyShip.transform.rotation.eulerAngles.x;
     }
 
-    void Update () {
+    public void UpdateMove () {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         float rHorizontal = Input.GetAxis("Mouse X");
