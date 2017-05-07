@@ -28,11 +28,15 @@ public class TrainIA : MonoBehaviour {
 		
         _uniformLaw = new ContinuousUniform(_range.x, _range.y);
         _normalLaw = new Normal(_paramNorm.x, _paramNorm.y);
+        Vector<float> entree = Vector<float>.Build.Dense(4);
 
-		NeuralPop neuralPop = new NeuralPop(_config,_taillePop);
-        neuralPop.InitPop(_uniformLaw,_config);
-		Vector<float> entree = Vector<float>.Build.Dense(4);
-		foreach (NeuralNet ln in neuralPop.NeuralNetPop)
+
+
+        NeuralPop neuralPop = new NeuralPop();
+        neuralPop.InitPop(_uniformLaw,_config, _taillePop);
+		
+        neuralPop.SavePop("IA");
+        foreach (NeuralNet ln in neuralPop.NeuralNetPop)
         {
             
             ln.CalcNet(entree);
@@ -40,31 +44,71 @@ public class TrainIA : MonoBehaviour {
 
               
             {
-                for (int i = 0; i < n.Weight.RowCount; i++)
-                {
-                    for (int j = 0; j < n.Weight.ColumnCount; j++)
-                    {
-                        Debug.Log("Point W: " + n.Weight[i, j]);
-                    }
-                }
-                Debug.Log("count : " + n.Bias.Count);
-                for (int i = 0; i < n.Bias.Count; i++)
-                {
-                   Debug.Log("Point b:" + n.Bias[i]);
-                }
+               
+                   Debug.Log("W: " + n.Weight.ToString());
+                    
+               
+                   Debug.Log("b:" + n.Bias.ToString());
+
+                
+
             }
+
+            
+
         }
-		neuralPop.SavePop("IA");
-		neuralPop.LoadPop("IA");
-		neuralPop.ReproducePop(10);
+        NeuralPop neuralPop2 = new NeuralPop();
+        neuralPop2.LoadPop("IA");
+        foreach (NeuralNet ln in neuralPop2.NeuralNetPop)
+        {
+
+            ln.CalcNet(entree);
+            foreach (NeuralLayer n in ln.LayerNet)
+
+
+            {
+
+                Debug.Log("W: " + n.Weight.ToString());
+
+
+                Debug.Log("b:" + n.Bias.ToString());
+
+                
+
+            }
+
+          
+        }
+       
+        neuralPop.ReproducePop(2);
 		neuralPop.MutatePop(_normalLaw,_probaMutation);
-		
+        foreach (NeuralNet ln in neuralPop.NeuralNetPop)
+        {
 
-        
+            ln.CalcNet(entree);
+            foreach (NeuralLayer n in ln.LayerNet)
 
-		
-        
-	}
+
+            {
+
+                Debug.Log("W: " + n.Weight.ToString());
+
+
+                Debug.Log("b:" + n.Bias.ToString());
+
+                
+
+            }
+
+           
+
+        }
+
+
+
+
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

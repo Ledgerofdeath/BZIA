@@ -18,15 +18,15 @@ public class NeuralPop {
 
     public List<NeuralNet> NeuralNetPop { get { return _neuralNetPop; } }
 
-	public NeuralPop( List<int> config, int taillePop )
+	public NeuralPop()
 	{
 		_neuralNetPop = new List<NeuralNet>();
-		_taillePop = taillePop;
 		
 	}
 	
-	public void InitPop(ContinuousUniform uni, List<int> config)
+	public void InitPop(ContinuousUniform uni, List<int> config, int taillePop)
     {
+        _taillePop = taillePop;
         int i = 0;
         while (i < _taillePop)
         {

@@ -84,16 +84,15 @@ public class NeuralNet {
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
         int i = UnityEngine.Random.Range(0, _config[c]);
         int j = UnityEngine.Random.Range(0, _config[c + 1]);
-        int k = UnityEngine.Random.Range(0, _config[c]);
       
 
         float aux1 = (child1.LayerNet[c].Weight)[i, j];
         (child1.LayerNet[c].Weight)[i, j] = (child2.LayerNet[c].Weight)[i, j];
         (child2.LayerNet[c].Weight)[i, j] = aux1;
 
-        float aux2 = (child1.LayerNet[c].Bias)[k];
-        (child1.LayerNet[c].Bias)[k] = (child2.LayerNet[c].Bias)[k];
-        (child2.LayerNet[c].Bias)[k] = aux2;
+        float aux2 = (child1.LayerNet[c].Bias)[i];
+        (child1.LayerNet[c].Bias)[i] = (child2.LayerNet[c].Bias)[i];
+        (child2.LayerNet[c].Bias)[i] = aux2;
 
 
         var children = new List<NeuralNet>
@@ -125,7 +124,7 @@ public class NeuralNet {
             (child2.LayerNet[c].Weight).SetRow(i, aux1);
 
             float aux6 = (child1.LayerNet[c].Bias)[i];
-            (child1.LayerNet[c].Bias)[i] = (child2.LayerNet[c - 1].Bias)[i];
+            (child1.LayerNet[c].Bias)[i] = (child2.LayerNet[c].Bias)[i];
             (child2.LayerNet[c].Bias)[i] = aux6;
 
         var children = new List<NeuralNet>
