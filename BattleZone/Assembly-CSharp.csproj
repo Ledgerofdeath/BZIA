@@ -49,12 +49,17 @@
      <Compile Include="Assets\Script\Environnement\LifeTime.cs" />
      <Compile Include="Assets\Script\Environnement\MissileManager.cs" />
      <Compile Include="Assets\Script\Environnement\ProjectileCollider.cs" />
+     <Compile Include="Assets\Script\Game\GameManager.cs" />
+     <Compile Include="Assets\Script\Game\PlayerManager.cs" />
      <Compile Include="Assets\Script\IA\NeuralLayer.cs" />
      <Compile Include="Assets\Script\IA\NeuralNet.cs" />
      <Compile Include="Assets\Script\IA\NeuralPop.cs" />
      <Compile Include="Assets\Script\IA\TrainIA.cs" />
+     <Compile Include="Assets\Script\Ship\ShipManager.cs" />
      <Compile Include="Assets\Script\Ship\ShipMove.cs" />
      <Compile Include="Assets\Script\Ship\ShipShoot.cs" />
+     <Compile Include="Assets\Script\Ship\WeaponData\ScriptableWeapon.cs" />
+     <Compile Include="Assets\Script\Ship\WeaponData\WeaponData.cs" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
      <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
