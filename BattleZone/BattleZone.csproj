@@ -101,6 +101,8 @@
     <Compile Include="Assets\Script\Environnement\ProjectileCollider.cs" />
     <Compile Include="Assets\Script\Game\GameManager.cs" />
     <Compile Include="Assets\Script\Game\PlayerManager.cs" />
+    <Compile Include="Assets\Script\IA\IAManager.cs" />
+    <Compile Include="Assets\Script\IA\IAVision.cs" />
     <Compile Include="Assets\Script\IA\NeuralLayer.cs" />
     <Compile Include="Assets\Script\IA\NeuralNet.cs" />
     <Compile Include="Assets\Script\IA\NeuralPop.cs" />

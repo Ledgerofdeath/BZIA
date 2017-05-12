@@ -19,6 +19,8 @@ public class ShipManager : MonoBehaviour {
     [SerializeField]
     private ShipMove _shipMove = null;
 
+    private int _team;
+
     public int Armor { get { return _armor; } }
     public int Ammo { get { return _ammo; } }
 
@@ -27,6 +29,8 @@ public class ShipManager : MonoBehaviour {
 
     public MissileManager MissileManager { get { return _missileManager; } }
     public ShipMove ShipMove { get { return _shipMove; } }
+
+    public int Team { get { return _team; } set { _team = value; } }
 
     void Start()
     {
