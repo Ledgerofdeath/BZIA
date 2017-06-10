@@ -36,7 +36,7 @@ public class NeuralNet {
         _score = 0;
     }
 
-    public void CalcNet(Vector<float> entree)
+    public Vector<float> CalcNet(Vector<float> entree)
     {
 		int i = 0;
 		
@@ -46,10 +46,11 @@ public class NeuralNet {
 		}
 		
 		entree=_layerNet[i].CalcLastLayer(entree);
+        return entree;
   
     }
 
-    public void MutateBias(Normal norm)
+    public void MutateBias1(Normal norm)
     {
 
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
@@ -59,7 +60,7 @@ public class NeuralNet {
 
     }
 
-    public void MutateWeigh(Normal norm)
+    public void MutateWeigh1(Normal norm)
     {
 
         int c = UnityEngine.Random.Range(0, (_config.Count-1));
@@ -68,6 +69,29 @@ public class NeuralNet {
        
 
         (_layerNet[c].Weight)[i, j] = (_layerNet[c].Weight)[i, j] +(float) norm.Sample();
+
+    }
+
+    public void MutateBias2()
+    {
+
+        int c = UnityEngine.Random.Range(0, (_config.Count - 1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
+        float p = UnityEngine.Random.Range(0.5f, 1.5f);
+
+
+        (_layerNet[c].Bias)[i] = p * (_layerNet[c].Bias)[i];
+    }
+
+    public void MutateWeigh2()
+    {
+
+        int c = UnityEngine.Random.Range(0, (_config.Count - 1));
+        int i = UnityEngine.Random.Range(0, _config[c]);
+        int j = UnityEngine.Random.Range(0, _config[c + 1]);
+        float p = UnityEngine.Random.Range(0.5f, 1.5f);
+
+        (_layerNet[c].Weight)[i, j] = p * (_layerNet[c].Weight)[i, j];
 
     }
 
@@ -136,5 +160,7 @@ public class NeuralNet {
         return children;
 
     }
+
+
 
 }

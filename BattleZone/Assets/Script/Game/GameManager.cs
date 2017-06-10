@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     GameObject _shipPrefab = null;
 
+    [SerializeField]
+    TerrainCollider _terrain;
+
     public int _nbTeam = 5;
     public int _shipByTeam = 2;
 
@@ -43,6 +46,8 @@ public class GameManager : MonoBehaviour {
 
     void ShipCreator()
     {
+        TerrainData terrainInfo = _terrain.terrainData;
+        float x, z;
         if (_shipPrefab != null)
         {
             for (int i = 0; i < _nbTeam; i++)
@@ -51,7 +56,9 @@ public class GameManager : MonoBehaviour {
                 {
                     GameObject ship = Instantiate(_shipPrefab) as GameObject;
                     ship.GetComponent<ShipManager>().Team = i;
-                    ship.transform.position = new Vector3(Random.Range(0.0f, _mapSize.x), 3.0f, Random.Range(0.0f, _mapSize.y));
+                    x = Random.Range(0.0f, terrainInfo.size.x);
+                    z = Random.Range(0.0f, terrainInfo.size.z);
+                    ship.transform.position = new Vector3(x, terrainInfo.GetHeight((int)x, (int)z) + 3.0f, z);
                     _ships.Add(ship);
                 }
             }

@@ -14,6 +14,10 @@ public class TrainIA : MonoBehaviour {
 
     public float _probaMutation;
 
+    public float _probaSelectMut;
+
+    public float _probaSelectRep;
+
     public int _taillePop;
 
     public Vector2 _range = Vector2.zero;
@@ -80,8 +84,8 @@ public class TrainIA : MonoBehaviour {
           
         }
        
-        neuralPop.ReproducePop(2);
-		neuralPop.MutatePop(_normalLaw,_probaMutation);
+        neuralPop.ReproducePop(2,_probaSelectRep);
+		neuralPop.MutatePop(_normalLaw,_probaMutation,_probaSelectMut);
         foreach (NeuralNet ln in neuralPop.NeuralNetPop)
         {
 

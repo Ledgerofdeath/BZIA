@@ -64,7 +64,7 @@ public class NeuralPop {
 		return res;
 	}
 	
-    public void MutatePop( Normal norm, float probaMutation)
+    public void MutatePop( Normal norm, float probaMutation, float probaSelectMut )
     {
         foreach (NeuralNet n in _neuralNetPop)
         {
@@ -72,18 +72,29 @@ public class NeuralPop {
 
             if (proba < probaMutation)
             {
-                n.MutateBias(norm);
-                n.MutateWeigh(norm);
+                float selectMut = UnityEngine.Random.Range(0f, 1.0f);
+                if (selectMut < probaSelectMut)
+                {
+                    n.MutateBias1(norm);
+                    n.MutateWeigh1(norm);
+                }
+                else
+                {                 
+                    n.MutateBias2();
+                    n.MutateWeigh2();  
+                }
+               
             }
         }
     }
 
-    public void ReproducePop (int numSel)
+    public void ReproducePop (int numSel, float probaSelectRep)
     {
         int i;
         int j;
         List<NeuralNet> temp = new List<NeuralNet>();
         List<NeuralNet> bestNN = this.SelectBest(numSel);
+        float selectRep = UnityEngine.Random.Range(0f, 1.0f);
 
         while (temp.Count < _taillePop)
         {
@@ -95,7 +106,15 @@ public class NeuralPop {
 
             } while (i == j);
 
-            temp.AddRange(bestNN[i].Reproduce2(bestNN[j]));
+            if (selectRep < probaSelectRep)
+            {
+                temp.AddRange(bestNN[i].Reproduce1(bestNN[j]));
+            }
+            else
+            {
+                temp.AddRange(bestNN[i].Reproduce2(bestNN[j]));
+            }
+            
         }
 
         _neuralNetPop = temp;
