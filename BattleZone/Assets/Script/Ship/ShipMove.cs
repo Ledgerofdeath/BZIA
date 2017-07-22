@@ -39,7 +39,8 @@ public class ShipMove : System.Object {
             HorizontalRotation(rHorizontal);
         if (rVertical != 0)
             VerticalRotation(rVertical);
-
+        FloatingEffect();
+        ShipAngle();
     }
 
     public void MoveVertical(float speed)
@@ -94,6 +95,37 @@ public class ShipMove : System.Object {
             _bodyShip.transform.Rotate(Vector3.left, orentation);
             _currentOrentation += orentation;
         }
+    }
+
+    public Rigidbody _rigidbody;
+    public float _floatingHeight = 4.0f;
+    public float bounceDamp = 0.05f;
+
+    Vector3 actionPoint;
+    float forceFactor;
+    Vector3 upLift;
+    void FloatingEffect()
+    {
+        float mapHeight = GameManager.Instance.Terrain.terrainData.GetHeight((int)transform.position.x, (int)transform.position.z);
+        actionPoint = transform.position;
+        forceFactor = 1f - ((actionPoint.y - mapHeight) / _floatingHeight);
+
+        if (forceFactor > 0f)
+        {
+            upLift = -Physics.gravity * (forceFactor - _rigidbody.velocity.y * bounceDamp);
+            _rigidbody.AddForceAtPosition(upLift, actionPoint);
+        }
+    }
+
+    void ShipAngle()
+    {
+        float forwardHeight = GameManager.Instance.Terrain.terrainData.GetHeight((int)((transform.forward * 5).x + transform.position.x), (int)((transform.forward * 5).z + transform.position.z));
+        float backHeight = GameManager.Instance.Terrain.terrainData.GetHeight((int)(((-transform.forward * 5).x) + transform.position.x), (int)(((-transform.forward * 5).z) + transform.position.z));
+
+        Vector3 angle = transform.eulerAngles;
+        angle.x = Mathf.Atan((backHeight - forwardHeight) / 10f) * Mathf.Rad2Deg;
+        transform.eulerAngles = angle;
+        Debug.Log("forward: " + forwardHeight + " back: " + backHeight);
     }
 
 }

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance { get { return _instance; } }
     public ScriptableWeapon WeaponData { get { return _weaponData; } }
     public List<GameObject> Ships { get { return _ships; } }
+    public TerrainCollider Terrain { get { return _terrain; } }
 
     void Awake()
     {

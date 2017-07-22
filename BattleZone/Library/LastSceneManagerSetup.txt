@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/BattleZone.unity
+- path: C:/Users/Karl/Documents/GitHub/AnimeFinder/Assets/animefinder.unity
   isLoaded: 1
   isActive: 1
